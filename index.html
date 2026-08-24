@@ -1,139 +1,599 @@
 <!DOCTYPE html>
-2
-<html>
-3
+<html lang="en">
 <head>
-4
-<title>Course Grade Calculator</title>
-5
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Specifications Grading Calculator</title>
+
 <style>
-6
-body {
-7
-font-family: Arial, sans-serif;
-8
-max-width: 700px;
-9
-margin: auto;
-10
-padding: 20px;
-11
+:root{
+    --green:#2e7d32;
+    --red:#c62828;
+    --blue:#1565c0;
+    --gray:#666;
+    --light:#f5f7fa;
 }
-12
- 
-13
-input {
-14
-width: 80px;
-15
-font-size: 16px;
-16
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin:0;
+    background:var(--light);
+    color:#222;
 }
-17
- 
-18
-button {
-19
-padding: 10px;
-20
-margin-top: 10px;
-21
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:20px;
 }
-22
- 
-23
-#result {
-24
-font-size: 24px;
-25
-margin-top: 20px;
-26
-color: darkblue;
-27
+
+h1{
+    text-align:center;
 }
-28
+
+.card{
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:15px;
+}
+
+label{
+    font-weight:bold;
+}
+
+input, select{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    font-size:16px;
+    box-sizing:border-box;
+}
+
+.big-grade{
+    font-size:2rem;
+    font-weight:bold;
+    color:var(--green);
+}
+
+.met{
+    color:var(--green);
+    font-weight:bold;
+}
+
+.possible{
+    color:var(--blue);
+    font-weight:bold;
+}
+
+.notpossible{
+    color:var(--red);
+    font-weight:bold;
+}
+
+.ladder-row{
+    border-bottom:1px solid #ddd;
+    padding:10px 0;
+}
+
+ul{
+    margin-top:5px;
+}
+
+.notice{
+    color:var(--gray);
+}
+
+.warning{
+    color:var(--red);
+    font-weight:bold;
+}
+
+.success{
+    color:var(--green);
+    font-weight:bold;
+}
 </style>
-29
 </head>
-30
- 
-31
+
 <body>
-32
- 
-33
+
+<div class="container">
+
 <h1>Specifications Grading Calculator</h1>
-34
- 
-35
-<p>Labs Passed:</p>
-36
-<input id="labs" type="number">
-37
- 
-38
-<p>Quizzes Passed:</p>
-39
-<input id="quizzes" type="number">
-40
- 
-41
-<button onclick="calculateGrade()">
-42
-Calculate Grade
-43
-</button>
-44
- 
-45
-<div id="result"></div>
-46
- 
-47
+
+<div class="card">
+<h2>Current Standing</h2>
+
+<div class="grid">
+
+<div>
+<label>Current Course Engagement Points</label>
+<input id="points" type="number" min="0" max="460" value="0">
+</div>
+
+<div>
+<label>Quizzes Graded (0-10)</label>
+<input id="quizzes" type="number" min="0" max="10" value="0">
+</div>
+
+<div>
+<label>Reflections Graded (0-4)</label>
+<input id="reflections" type="number" min="0" max="4" value="0">
+</div>
+
+<div>
+<label>Exit Tickets Graded (0-26)</label>
+<input id="exitTickets" type="number" min="0" max="26" value="0">
+</div>
+
+</div>
+</div>
+
+<div class="card">
+<h2>Oral History Planner</h2>
+
+<div class="grid">
+
+<div>
+<label>Part 1</label>
+<select id="part1">
+<option>Not Graded Yet</option>
+<option>Satisfactory</option>
+<option>Unsatisfactory</option>
+</select>
+</div>
+
+<div>
+<label>Part 2</label>
+<select id="part2">
+<option>Not Graded Yet</option>
+<option>Satisfactory</option>
+<option>Unsatisfactory</option>
+</select>
+</div>
+
+<div>
+<label>Final Paper</label>
+<select id="finalPaper">
+<option>Not Graded Yet</option>
+<option>Excellent</option>
+<option>Proficient</option>
+<option>Developing</option>
+<option>Needs Improvement</option>
+</select>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+<h2>Current Grade</h2>
+<div id="currentGrade"></div>
+</div>
+
+<div class="card">
+<h2>Bundle Tracker</h2>
+<div id="bundleTracker"></div>
+</div>
+
+<div class="card">
+<h2>Highest Grade Still Possible & Remaining Opportunities</h2>
+<div id="highestPossible"></div>
+</div>
+
+<div class="card">
+<h2>Grade Ladder</h2>
+<div id="gradeLadder"></div>
+</div>
+
+<div class="card">
+<h2>Limiting Factors</h2>
+<div id="limitingFactors"></div>
+</div>
+
+</div>
+
 <script>
-48
- 
-49
-function calculateGrade() {
-50
- 
-51
-let labs = Number(document.getElementById("labs").value);
-52
-let quizzes = Number(document.getElementById("quizzes").value);
-53
- 
-54
-let grade = "C";
-55
- 
-56
-if (labs >= 12 && quizzes >= 8) {
-57
-grade = "A";
-58
+
+const gradeRules = [
+{
+grade:"A",
+min:373,
+max:460,
+oral:"bothS",
+paper:"Excellent"
+},
+{
+grade:"A-",
+min:328,
+max:372,
+oral:"bothS",
+paper:"Excellent"
+},
+{
+grade:"B+",
+min:309,
+max:327,
+oral:"oneS",
+paper:"Excellent"
+},
+{
+grade:"B",
+min:287,
+max:308,
+oral:"oneS",
+paper:"Proficient"
+},
+{
+grade:"B-",
+min:264,
+max:286,
+oral:"oneS",
+paper:"Proficient"
+},
+{
+grade:"C+",
+min:250,
+max:263,
+oral:"bothU",
+paper:"Proficient"
+},
+{
+grade:"C",
+min:233,
+max:249,
+oral:"bothU",
+paper:"Developing"
+},
+{
+grade:"C-",
+min:216,
+max:232,
+oral:"bothU",
+paper:"Developing"
+},
+{
+grade:"D+",
+min:184,
+max:215,
+oral:"bothU",
+paper:"Developing"
+},
+{
+grade:"D",
+min:167,
+max:183,
+oral:"bothU",
+paper:"Needs Improvement"
 }
-59
-else if (labs >= 10 && quizzes >= 7) {
-60
-grade = "B";
-61
+];
+
+function oralStatus(part1, part2){
+
+if(part1==="Satisfactory" && part2==="Satisfactory"){
+return "bothS";
 }
-62
- 
-63
-document.getElementById("result").innerHTML =
-64
-"Current Grade: " + grade;
-65
+
+if(part1==="Satisfactory" || part2==="Satisfactory"){
+return "oneS";
 }
-66
- 
-67
+
+return "bothU";
+}
+
+function currentGrade(points, part1, part2, paper){
+
+if(
+part1==="Not Graded Yet" ||
+part2==="Not Graded Yet" ||
+paper==="Not Graded Yet"
+){
+return null;
+}
+
+const oral = oralStatus(part1,part2);
+
+for(let rule of gradeRules){
+
+const oralMatch =
+(rule.oral === oral) ||
+(rule.oral === "oneS" && oral === "bothS");
+
+if(
+points >= rule.min &&
+points <= rule.max &&
+oralMatch &&
+paper === rule.paper
+){
+return rule.grade;
+}
+}
+
+if(points < 167){
+return "F";
+}
+
+return "No matching grade";
+}
+
+function update(){
+
+const points =
+Number(document.getElementById("points").value);
+
+const quizzes =
+Number(document.getElementById("quizzes").value);
+
+const reflections =
+Number(document.getElementById("reflections").value);
+
+const exitTickets =
+Number(document.getElementById("exitTickets").value);
+
+const part1 =
+document.getElementById("part1").value;
+
+const part2 =
+document.getElementById("part2").value;
+
+const paper =
+document.getElementById("finalPaper").value;
+
+const remainingQuizPoints =
+(10 - quizzes) * 10;
+
+const remainingReflectionPoints =
+(4 - reflections) * 25;
+
+const remainingExitTicketPoints =
+(26 - exitTickets) * 10;
+
+const totalRemaining =
+remainingQuizPoints +
+remainingReflectionPoints +
+remainingExitTicketPoints;
+
+const maxPossiblePoints =
+points + totalRemaining;
+
+const current =
+currentGrade(
+points,
+part1,
+part2,
+paper
+);
+
+if(current === null){
+
+document.getElementById("currentGrade").innerHTML =
+`
+<div class="warning">
+Current Grade Cannot Yet Be Fully Determined
+</div>
+<br>
+Current Points: <b>${points}</b><br>
+Maximum Possible Final Points: <b>${maxPossiblePoints}</b>
+`;
+
+} else {
+
+document.getElementById("currentGrade").innerHTML =
+`
+<div class="big-grade">${current}</div>
+Current Points: <b>${points}</b><br>
+Maximum Possible Final Points: <b>${maxPossiblePoints}</b>
+`;
+}
+
+let bundleHTML = "";
+
+for(let rule of gradeRules){
+
+const need =
+Math.max(0, rule.min - points);
+
+bundleHTML += `
+<p>
+<b>${rule.grade}</b>:
+${need === 0
+? '<span class="met">MET ✓</span>'
+: `Need ${need} more points`
+}
+</p>
+`;
+}
+
+document.getElementById("bundleTracker").innerHTML =
+bundleHTML;
+
+const futurePart1 =
+part1 === "Not Graded Yet"
+? "Satisfactory"
+: part1;
+
+const futurePart2 =
+part2 === "Not Graded Yet"
+? "Satisfactory"
+: part2;
+
+const futurePaper =
+paper === "Not Graded Yet"
+? "Excellent"
+: paper;
+
+const futureOral =
+oralStatus(
+futurePart1,
+futurePart2
+);
+
+let highestGrade = "F";
+
+for(let rule of gradeRules){
+
+const oralMatch =
+(rule.oral === futureOral) ||
+(rule.oral === "oneS" &&
+futureOral === "bothS");
+
+if(
+maxPossiblePoints >= rule.min &&
+oralMatch &&
+futurePaper === rule.paper
+){
+highestGrade = rule.grade;
+break;
+}
+}
+
+const targetRule =
+gradeRules.find(
+g => g.grade === highestGrade
+);
+
+const needed =
+targetRule
+? Math.max(
+0,
+targetRule.min - points
+)
+: 0;
+
+document.getElementById("highestPossible").innerHTML =
+`
+<p><b>Highest Grade Still Possible: ${highestGrade}</b></p>
+
+<p>
+You need <b>${needed}</b> additional points.
+</p>
+
+<h3>Remaining Opportunities</h3>
+
+<ul>
+<li>
+Quizzes:
+${10-quizzes} remaining
+(${remainingQuizPoints} possible points)
+</li>
+
+<li>
+Reflections:
+${4-reflections} remaining
+(${remainingReflectionPoints} possible points)
+</li>
+
+<li>
+Exit Tickets:
+${26-exitTickets} remaining
+(${remainingExitTicketPoints} possible points)
+</li>
+</ul>
+
+<p>
+Total Remaining Possible Points:
+<b>${totalRemaining}</b>
+</p>
+
+<p>
+<b>
+You need ${needed}
+of the remaining
+${totalRemaining}
+available points.
+</b>
+</p>
+`;
+
+let ladderHTML = `
+<p>
+Current Points:
+<b>${points}</b>
+</p>
+
+<p>
+Maximum Possible Final Points:
+<b>${maxPossiblePoints}</b>
+</p>
+`;
+
+for(let rule of gradeRules){
+
+let status = "";
+
+if(points >= rule.min){
+status =
+'<span class="met">Currently Met</span>';
+}
+else if(maxPossiblePoints >= rule.min){
+status =
+'<span class="possible">Still Possible</span>';
+}
+else{
+status =
+'<span class="notpossible">Not Possible</span>';
+}
+
+ladderHTML += `
+<div class="ladder-row">
+<b>${rule.grade}</b>
+(${rule.min}+ points)
+<br>
+${status}
+</div>
+`;
+}
+
+document.getElementById("gradeLadder").innerHTML =
+ladderHTML;
+
+let limits = [];
+
+if(
+maxPossiblePoints >= 373
+){
+
+if(
+futurePart1 !== "Satisfactory" ||
+futurePart2 !== "Satisfactory"
+){
+limits.push(
+"A/A- require both Part 1 and Part 2 to be Satisfactory."
+);
+}
+
+if(
+futurePaper !== "Excellent"
+){
+limits.push(
+"A/A- require an Excellent final paper."
+);
+}
+}
+
+document.getElementById("limitingFactors").innerHTML =
+limits.length === 0
+? '<span class="success">No current limiting factors identified.</span>'
+: limits.map(x => `<p class="warning">${x}</p>`).join("");
+}
+
+document
+.querySelectorAll("input, select")
+.forEach(element =>
+element.addEventListener("input", update)
+);
+
+update();
+
 </script>
-68
- 
-69
+
 </body>
-70
 </html>
