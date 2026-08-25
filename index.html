@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Specifications Grading Calculator</title>
+<title>SOAN251 Fall 2026 Specifications Grading Calculator</title>
 
 <style>
 :root{
@@ -175,16 +175,6 @@ ul{
 </div>
 
 <div class="card">
-<h2>Current Grade</h2>
-<div id="currentGrade"></div>
-</div>
-
-<div class="card">
-<h2>Bundle Tracker</h2>
-<div id="bundleTracker"></div>
-</div>
-
-<div class="card">
 <h2>Highest Grade Still Possible & Remaining Opportunities</h2>
 <div id="highestPossible"></div>
 </div>
@@ -289,16 +279,6 @@ return "oneS";
 return "bothU";
 }
 
-function currentGrade(points, part1, part2, paper){
-
-if(
-part1==="Not Graded Yet" ||
-part2==="Not Graded Yet" ||
-paper==="Not Graded Yet"
-){
-return null;
-}
-
 const oral = oralStatus(part1,part2);
 
 for(let rule of gradeRules){
@@ -364,36 +344,6 @@ remainingExitTicketPoints;
 const maxPossiblePoints =
 points + totalRemaining;
 
-const current =
-currentGrade(
-points,
-part1,
-part2,
-paper
-);
-
-if(current === null){
-
-document.getElementById("currentGrade").innerHTML =
-`
-<div class="warning">
-Current Grade Cannot Yet Be Fully Determined
-</div>
-<br>
-Current Points: <b>${points}</b><br>
-Maximum Possible Final Points: <b>${maxPossiblePoints}</b>
-`;
-
-} else {
-
-document.getElementById("currentGrade").innerHTML =
-`
-<div class="big-grade">${current}</div>
-Current Points: <b>${points}</b><br>
-Maximum Possible Final Points: <b>${maxPossiblePoints}</b>
-`;
-}
-
 let bundleHTML = "";
 
 for(let rule of gradeRules){
@@ -411,62 +361,6 @@ ${need === 0
 </p>
 `;
 }
-
-document.getElementById("bundleTracker").innerHTML =
-bundleHTML;
-
-const futurePart1 =
-part1 === "Not Graded Yet"
-? "Satisfactory"
-: part1;
-
-const futurePart2 =
-part2 === "Not Graded Yet"
-? "Satisfactory"
-: part2;
-
-const futurePaper =
-paper === "Not Graded Yet"
-? "Excellent"
-: paper;
-
-const futureOral =
-oralStatus(
-futurePart1,
-futurePart2
-);
-
-let highestGrade = "F";
-
-for(let rule of gradeRules){
-
-const oralMatch =
-(rule.oral === futureOral) ||
-(rule.oral === "oneS" &&
-futureOral === "bothS");
-
-if(
-maxPossiblePoints >= rule.min &&
-oralMatch &&
-futurePaper === rule.paper
-){
-highestGrade = rule.grade;
-break;
-}
-}
-
-const targetRule =
-gradeRules.find(
-g => g.grade === highestGrade
-);
-
-const needed =
-targetRule
-? Math.max(
-0,
-targetRule.min - points
-)
-: 0;
 
 document.getElementById("highestPossible").innerHTML =
 `
