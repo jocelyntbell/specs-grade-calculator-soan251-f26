@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Specifications Grading Calculator</title>
+<title>SOAN251 Fall 2026 Specifications Grading Calculator</title>
 
 <style>
 
@@ -106,8 +106,8 @@ h1{
 
 <div class="notice">
 <strong>Important:</strong>
-This calculator is intended for planning purposes only.
-Official course grades are determined by the instructor and the course syllabus.
+This calculator is intended as a reference tool.
+Official course grades are determined by the instructor in accordance with the course syllabus.
 </div>
 
 <div class="card">
@@ -142,7 +142,7 @@ Official course grades are determined by the instructor and the course syllabus.
 
 <div class="card">
 
-<h2>Oral History Planner</h2>
+<h2>Oral History Grade</h2>
 
 <div class="grid">
 
@@ -209,6 +209,7 @@ papers:["Excellent"]
 
 {
 grade:"A-",
+max:372.999,
 min:328,
 oral:"bothS",
 papers:["Excellent"]
@@ -216,58 +217,87 @@ papers:["Excellent"]
 
 {
 grade:"B+",
+max:327.999,
 min:309,
-oral:"oneS",
-papers:["Excellent"]
+oral:["oneS","bothS"],
+papers:["Excellent","Proficient"]
 },
 
 {
 grade:"B",
+max:308.999,
 min:287,
-oral:"oneS",
-papers:["Proficient"]
+oral:["oneS","bothS"],
+papers:["Excellent","Proficient"]
 },
 
 {
 grade:"B-",
+max:286.999,
 min:264,
-oral:"oneS",
-papers:["Proficient"]
+oral:["oneS","bothS"]
+papers:["Excellent","Proficient"]
+},
+
+{
+grade:"C+",
+max:263.999,
+min:250,
+oral:["bothS","oneS","bothU"],
+papers:["Developing","Proficient","Excellent"]
 },
 
 {
 grade:"C+",
 min:250,
 oral:"bothU",
-papers:["Proficient","Excellent"]
+papers:["Developing","Proficient","Excellent"]
+},
+
+{
+grade:"C+",
+min:250,
+oral:["bothS","oneS","bothU"],
+papers:"Developing"
 },
 
 {
 grade:"C",
+max:249.999,
 min:233,
-oral:"bothU",
-papers:["Developing"]
+oral:["bothS","oneS","bothU"],
+papers:["Developing","Proficient","Excellent"]
 },
 
 {
 grade:"C-",
+max:232.999,
 min:216,
-oral:"bothU",
-papers:["Developing"]
+oral:["bothS","oneS","bothU"],
+papers:["Developing","Proficient","Excellent"]
+},
+
+{
+grade:"D+",
+max:215.999,
+min:184,
+oral:["bothS","oneS","bothU"],
+papers:["Needs Improvement","Developing","Proficient","Excellent"]
 },
 
 {
 grade:"D+",
 min:184,
-oral:"bothU",
-papers:["Developing","Proficient","Excellent"]
+oral:["bothS","oneS","bothU"],
+papers:"Needs Improvement"
 },
 
 {
 grade:"D",
+max:183.999,
 min:167,
-oral:"bothU",
-papers:["Needs Improvement"]
+oral:["bothS","oneS","bothU"],
+papers:["Needs Improvement","Developing","Proficient","Excellent"]
 }
 
 ];
