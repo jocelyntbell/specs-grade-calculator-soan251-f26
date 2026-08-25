@@ -3,32 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOAN251 Fall 2026 Specifications Grading Calculator</title>
+
+<title>Specifications Grading Calculator</title>
 
 <style>
+
 :root{
     --green:#2e7d32;
-    --red:#c62828;
     --blue:#1565c0;
-    --gray:#666;
-    --light:#f5f7fa;
+    --red:#c62828;
+    --background:#f5f7fa;
 }
 
 body{
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, sans-serif;
     margin:0;
-    background:var(--light);
+    padding:20px;
+    background:var(--background);
     color:#222;
 }
 
 .container{
     max-width:1100px;
     margin:auto;
-    padding:20px;
-}
-
-h1{
-    text-align:center;
 }
 
 .card{
@@ -45,22 +42,27 @@ h1{
     gap:15px;
 }
 
-label{
-    font-weight:bold;
-}
-
-input, select{
+input,
+select{
     width:100%;
     padding:10px;
-    margin-top:5px;
     font-size:16px;
     box-sizing:border-box;
 }
 
-.big-grade{
-    font-size:2rem;
+label{
     font-weight:bold;
-    color:var(--green);
+}
+
+h1{
+    text-align:center;
+}
+
+.notice{
+    background:#fff8e1;
+    border-left:5px solid #f9a825;
+    padding:15px;
+    margin-bottom:25px;
 }
 
 .met{
@@ -78,19 +80,6 @@ input, select{
     font-weight:bold;
 }
 
-.ladder-row{
-    border-bottom:1px solid #ddd;
-    padding:10px 0;
-}
-
-ul{
-    margin-top:5px;
-}
-
-.notice{
-    color:var(--gray);
-}
-
 .warning{
     color:var(--red);
     font-weight:bold;
@@ -100,6 +89,12 @@ ul{
     color:var(--green);
     font-weight:bold;
 }
+
+.ladder-row{
+    padding:10px 0;
+    border-bottom:1px solid #ddd;
+}
+
 </style>
 </head>
 
@@ -109,8 +104,15 @@ ul{
 
 <h1>Specifications Grading Calculator</h1>
 
+<div class="notice">
+<strong>Important:</strong>
+This calculator is intended for planning purposes only.
+Official course grades are determined by the instructor and the course syllabus.
+</div>
+
 <div class="card">
-<h2>Current Standing</h2>
+
+<h2>Course Status</h2>
 
 <div class="grid">
 
@@ -135,9 +137,11 @@ ul{
 </div>
 
 </div>
+
 </div>
 
 <div class="card">
+
 <h2>Oral History Planner</h2>
 
 <div class="grid">
@@ -172,6 +176,7 @@ ul{
 </div>
 
 </div>
+
 </div>
 
 <div class="card">
@@ -194,128 +199,107 @@ ul{
 <script>
 
 const gradeRules = [
+
 {
 grade:"A",
 min:373,
-max:460,
 oral:"bothS",
-paper:"Excellent"
+papers:["Excellent"]
 },
+
 {
 grade:"A-",
 min:328,
-max:372,
 oral:"bothS",
-paper:"Excellent"
+papers:["Excellent"]
 },
+
 {
 grade:"B+",
 min:309,
-max:327,
 oral:"oneS",
-paper:"Excellent"
+papers:["Excellent"]
 },
+
 {
 grade:"B",
 min:287,
-max:308,
 oral:"oneS",
-paper:"Proficient"
+papers:["Proficient"]
 },
+
 {
 grade:"B-",
 min:264,
-max:286,
 oral:"oneS",
-paper:"Proficient"
+papers:["Proficient"]
 },
+
 {
 grade:"C+",
 min:250,
-max:263,
 oral:"bothU",
-paper:"Proficient"
+papers:["Proficient","Excellent"]
 },
+
 {
 grade:"C",
 min:233,
-max:249,
 oral:"bothU",
-paper:"Developing"
+papers:["Developing"]
 },
+
 {
 grade:"C-",
 min:216,
-max:232,
 oral:"bothU",
-paper:"Developing"
+papers:["Developing"]
 },
+
 {
 grade:"D+",
 min:184,
-max:215,
 oral:"bothU",
-paper:"Developing"
+papers:["Developing","Proficient","Excellent"]
 },
+
 {
 grade:"D",
 min:167,
-max:183,
 oral:"bothU",
-paper:"Needs Improvement"
+papers:["Needs Improvement"]
 }
+
 ];
 
 function oralStatus(part1, part2){
 
-if(part1==="Satisfactory" && part2==="Satisfactory"){
-return "bothS";
+if(part1 === "Satisfactory" &&
+   part2 === "Satisfactory"){
+    return "bothS";
 }
 
-if(part1==="Satisfactory" || part2==="Satisfactory"){
-return "oneS";
+if(part1 === "Satisfactory" ||
+   part2 === "Satisfactory"){
+    return "oneS";
 }
 
 return "bothU";
-}
 
-const oral = oralStatus(part1,part2);
-
-for(let rule of gradeRules){
-
-const oralMatch =
-(rule.oral === oral) ||
-(rule.oral === "oneS" && oral === "bothS");
-
-if(
-points >= rule.min &&
-points <= rule.max &&
-oralMatch &&
-paper === rule.paper
-){
-return rule.grade;
-}
-}
-
-if(points < 167){
-return "F";
-}
-
-return "No matching grade";
 }
 
 function update(){
 
-const points =
+const currentPoints =
 Number(document.getElementById("points").value);
 
-const quizzes =
+const quizzesGraded =
 Number(document.getElementById("quizzes").value);
 
-const reflections =
+const reflectionsGraded =
 Number(document.getElementById("reflections").value);
 
-const exitTickets =
+const exitTicketsGraded =
 Number(document.getElementById("exitTickets").value);
 
 const part1 =
@@ -324,143 +308,228 @@ document.getElementById("part1").value;
 const part2 =
 document.getElementById("part2").value;
 
-const paper =
+const finalPaper =
 document.getElementById("finalPaper").value;
 
 const remainingQuizPoints =
-(10 - quizzes) * 10;
+(10 - quizzesGraded) * 10;
 
 const remainingReflectionPoints =
-(4 - reflections) * 25;
+(4 - reflectionsGraded) * 25;
 
 const remainingExitTicketPoints =
-(26 - exitTickets) * 10;
+(26 - exitTicketsGraded) * 10;
 
-const totalRemaining =
+const remainingPoints =
 remainingQuizPoints +
 remainingReflectionPoints +
 remainingExitTicketPoints;
 
-const maxPossiblePoints =
-points + totalRemaining;
+const maximumPossiblePoints =
+currentPoints +
+remainingPoints;
 
-let bundleHTML = "";
+const futurePart1 =
+part1 === "Not Graded Yet"
+? "Satisfactory"
+: part1;
 
-for(let rule of gradeRules){
+const futurePart2 =
+part2 === "Not Graded Yet"
+? "Satisfactory"
+: part2;
 
-const need =
-Math.max(0, rule.min - points);
+const futurePaper =
+finalPaper === "Not Graded Yet"
+? "Excellent"
+: finalPaper;
 
-bundleHTML += `
-<p>
-<b>${rule.grade}</b>:
-${need === 0
-? '<span class="met">MET ✓</span>'
-: `Need ${need} more points`
+const futureOral =
+oralStatus(
+futurePart1,
+futurePart2
+);
+
+let highestGrade = "F";
+
+for(const rule of gradeRules){
+
+const oralMatch =
+(rule.oral === futureOral) ||
+(rule.oral === "oneS" &&
+futureOral === "bothS");
+
+const paperMatch =
+rule.papers.includes(
+futurePaper
+);
+
+if(
+maximumPossiblePoints >= rule.min &&
+oralMatch &&
+paperMatch
+){
+highestGrade = rule.grade;
+break;
 }
+
+}
+
+const targetRule =
+gradeRules.find(
+g => g.grade === highestGrade
+);
+
+const pointsNeeded =
+targetRule
+? Math.max(
+0,
+targetRule.min - currentPoints
+)
+: 0;
+
+document.getElementById(
+"highestPossible"
+).innerHTML = `
+
+<h3>
+Highest Grade Still Possible:
+${highestGrade}
+</h3>
+
+<p>
+Current Points:
+<b>${currentPoints}</b>
 </p>
-`;
-}
-
-document.getElementById("highestPossible").innerHTML =
-`
-<p><b>Highest Grade Still Possible: ${highestGrade}</b></p>
 
 <p>
-You need <b>${needed}</b> additional points.
+Highest Possible Final Points:
+<b>${maximumPossiblePoints}</b>
+</p>
+
+<p>
+Minimum Additional Points Needed:
+<b>${pointsNeeded}</b>
 </p>
 
 <h3>Remaining Opportunities</h3>
 
 <ul>
+
 <li>
-Quizzes:
-${10-quizzes} remaining
+Quizzes Remaining:
+<b>${10-quizzesGraded}</b>
 (${remainingQuizPoints} possible points)
 </li>
 
 <li>
-Reflections:
-${4-reflections} remaining
+Reflections Remaining:
+<b>${4-reflectionsGraded}</b>
 (${remainingReflectionPoints} possible points)
 </li>
 
 <li>
-Exit Tickets:
-${26-exitTickets} remaining
+Exit Tickets Remaining:
+<b>${26-exitTicketsGraded}</b>
 (${remainingExitTicketPoints} possible points)
 </li>
+
 </ul>
 
 <p>
 Total Remaining Possible Points:
-<b>${totalRemaining}</b>
+<b>${remainingPoints}</b>
 </p>
 
 <p>
 <b>
-You need ${needed}
+You need
+${pointsNeeded}
 of the remaining
-${totalRemaining}
+${remainingPoints}
 available points.
 </b>
 </p>
+
 `;
 
 let ladderHTML = `
+
 <p>
 Current Points:
-<b>${points}</b>
+<b>${currentPoints}</b>
 </p>
 
 <p>
-Maximum Possible Final Points:
-<b>${maxPossiblePoints}</b>
+Highest Possible Final Points:
+<b>${maximumPossiblePoints}</b>
 </p>
+
+<hr>
+
 `;
 
-for(let rule of gradeRules){
+for(const rule of gradeRules){
 
 let status = "";
 
-if(points >= rule.min){
+if(currentPoints >= rule.min){
+
 status =
-'<span class="met">Currently Met</span>';
+'<span class="met">Threshold Met</span>';
+
 }
-else if(maxPossiblePoints >= rule.min){
+else if(maximumPossiblePoints >= rule.min){
+
 status =
 '<span class="possible">Still Possible</span>';
+
 }
 else{
+
 status =
 '<span class="notpossible">Not Possible</span>';
+
 }
 
 ladderHTML += `
+
 <div class="ladder-row">
+
 <b>${rule.grade}</b>
 (${rule.min}+ points)
+
 <br>
+
 ${status}
+
 </div>
+
 `;
+
 }
 
-document.getElementById("gradeLadder").innerHTML =
-ladderHTML;
+document.getElementById(
+"gradeLadder"
+).innerHTML = ladderHTML;
 
 let limits = [];
 
 if(
-maxPossiblePoints >= 373
+futurePart1 !== "Satisfactory" &&
+futurePart2 !== "Satisfactory"
 ){
+limits.push(
+"B- or higher requires at least one Satisfactory rating on Part 1 or Part 2."
+);
+}
 
 if(
 futurePart1 !== "Satisfactory" ||
 futurePart2 !== "Satisfactory"
 ){
 limits.push(
-"A/A- require both Part 1 and Part 2 to be Satisfactory."
+"A- and A require both Part 1 and Part 2 to be Satisfactory."
 );
 }
 
@@ -468,20 +537,38 @@ if(
 futurePaper !== "Excellent"
 ){
 limits.push(
-"A/A- require an Excellent final paper."
+"A- and A require an Excellent final paper."
 );
 }
+
+if(
+futurePaper === "Needs Improvement"
+){
+limits.push(
+"A final paper rated Needs Improvement limits grades to D."
+);
 }
 
-document.getElementById("limitingFactors").innerHTML =
+document.getElementById(
+"limitingFactors"
+).innerHTML =
+
 limits.length === 0
-? '<span class="success">No current limiting factors identified.</span>'
-: limits.map(x => `<p class="warning">${x}</p>`).join("");
+
+? `<p class="success">
+No limiting factors currently prevent the highest achievable grade.
+</p>`
+
+: limits.map(
+x => `<p class="warning">${x}</p>`
+).join("");
+
 }
 
 document
 .querySelectorAll("input, select")
-.forEach(element =>
+.forEach(
+element =>
 element.addEventListener("input", update)
 );
 
