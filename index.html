@@ -203,7 +203,7 @@ const gradeRules = [
 {
 grade:"A",
 min:373,
-oral:"bothS",
+oral:["bothS"],
 papers:["Excellent"]
 },
 
@@ -211,7 +211,7 @@ papers:["Excellent"]
 grade:"A-",
 max:372.999,
 min:328,
-oral:"bothS",
+oral:["bothS"],
 papers:["Excellent"]
 },
 
@@ -235,7 +235,7 @@ papers:["Excellent","Proficient"]
 grade:"B-",
 max:286.999,
 min:264,
-oral:["oneS","bothS"]
+oral:["oneS","bothS"],
 papers:["Excellent","Proficient"]
 },
 
@@ -250,7 +250,7 @@ papers:["Developing","Proficient","Excellent"]
 {
 grade:"C+",
 min:250,
-oral:"bothU",
+oral:["bothU"],
 papers:["Developing","Proficient","Excellent"]
 },
 
@@ -258,7 +258,7 @@ papers:["Developing","Proficient","Excellent"]
 grade:"C+",
 min:250,
 oral:["bothS","oneS","bothU"],
-papers:"Developing"
+papers:["Developing"]
 },
 
 {
@@ -289,7 +289,7 @@ papers:["Needs Improvement","Developing","Proficient","Excellent"]
 grade:"D+",
 min:184,
 oral:["bothS","oneS","bothU"],
-papers:"Needs Improvement"
+papers:["Needs Improvement"]
 },
 
 {
@@ -385,14 +385,10 @@ let highestGrade = "F";
 for(const rule of gradeRules){
 
 const oralMatch =
-(rule.oral === futureOral) ||
-(rule.oral === "oneS" &&
-futureOral === "bothS");
+rule.oral.includes(futureOral);
 
 const paperMatch =
-rule.papers.includes(
-futurePaper
-);
+rule.papers.includes(futurePaper);
 
 if(
 maximumPossiblePoints >= rule.min &&
@@ -501,12 +497,12 @@ Highest Possible Final Points:
 
 for(const rule of gradeRules){
 
-let status = "";
+let status="";
 
 if(currentPoints >= rule.min){
 
 status =
-'<span class="met">Threshold Met</span>';
+'<span class="met">Currently Met by Points</span>';
 
 }
 else if(maximumPossiblePoints >= rule.min){
@@ -546,37 +542,43 @@ document.getElementById(
 let limits = [];
 
 if(
+highestGrade === "A" ||
+highestGrade === "A-"
+){
+
+if(futurePart1 !== "Satisfactory"){
+limits.push(
+"Part 1 must be Satisfactory for an A or A-."
+);
+}
+
+if(futurePart2 !== "Satisfactory"){
+limits.push(
+"Part 2 must be Satisfactory for an A or A-."
+);
+}
+
+if(futurePaper !== "Excellent"){
+limits.push(
+"Final Paper must be Excellent for an A or A-."
+);
+}
+
+}
+
+if(
+(highestGrade === "B+" ||
+ highestGrade === "B" ||
+ highestGrade === "B-") &&
+
 futurePart1 !== "Satisfactory" &&
 futurePart2 !== "Satisfactory"
 ){
+
 limits.push(
 "B- or higher requires at least one Satisfactory rating on Part 1 or Part 2."
 );
-}
 
-if(
-futurePart1 !== "Satisfactory" ||
-futurePart2 !== "Satisfactory"
-){
-limits.push(
-"A- and A require both Part 1 and Part 2 to be Satisfactory."
-);
-}
-
-if(
-futurePaper !== "Excellent"
-){
-limits.push(
-"A- and A require an Excellent final paper."
-);
-}
-
-if(
-futurePaper === "Needs Improvement"
-){
-limits.push(
-"A final paper rated Needs Improvement limits grades to D."
-);
 }
 
 document.getElementById(
@@ -586,7 +588,7 @@ document.getElementById(
 limits.length === 0
 
 ? `<p class="success">
-No limiting factors currently prevent the highest achievable grade.
+No limiting factors currently prevent your highest possible grade.
 </p>`
 
 : limits.map(
