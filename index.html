@@ -209,7 +209,7 @@ Official course grades are determined by the instructor in accordance with the c
 <div class="grid">
 
 <div>
-<label>Part 1</label>
+<label>Draft 1</label>
 <select id="part1">
 <option>Not Graded Yet</option>
 <option>Satisfactory</option>
@@ -218,7 +218,7 @@ Official course grades are determined by the instructor in accordance with the c
 </div>
 
 <div>
-<label>Part 2</label>
+<label>Draft 2</label>
 <select id="part2">
 <option>Not Graded Yet</option>
 <option>Satisfactory</option>
@@ -591,7 +591,7 @@ let tableHTML = `
 <tr>
 <th>Grade</th>
 <th>Course Engagement Points</th>
-<th>Oral History Parts 1 & 2</th>
+<th>Oral History Drafts 1 & 2</th>
 <th>Final Paper</th>
 </tr>
 
@@ -724,13 +724,13 @@ highestGrade === "A-"
 
 if(futurePart1 !== "Satisfactory"){
 limits.push(
-"Part 1 must be Satisfactory for an A or A-."
+"Draft 1 must be Satisfactory for an A or A-."
 );
 }
 
 if(futurePart2 !== "Satisfactory"){
 limits.push(
-"Part 2 must be Satisfactory for an A or A-."
+"Draft 2 must be Satisfactory for an A or A-."
 );
 }
 
@@ -752,7 +752,7 @@ futurePart2 !== "Satisfactory"
 ){
 
 limits.push(
-"B- or higher requires at least one Satisfactory rating on Part 1 or Part 2."
+"B- or higher requires at least one Satisfactory rating on Draft 1 or Draft 2."
 );
 
 }
