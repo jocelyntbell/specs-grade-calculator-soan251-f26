@@ -95,6 +95,68 @@ h1{
     border-bottom:1px solid #ddd;
 }
 
+.legend{
+    margin-bottom:15px;
+}
+
+.legend-item{
+    margin-bottom:8px;
+}
+
+.legend-box{
+    display:inline-block;
+    width:18px;
+    height:18px;
+    margin-right:8px;
+    border:1px solid #444;
+    vertical-align:middle;
+}
+
+.highest{
+    background:#004D40;
+}
+
+.attainable{
+    background:#40B0A6;
+}
+
+.impossible{
+    background:white;
+}
+
+.bundle-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+
+.bundle-table th,
+.bundle-table td{
+    border:1px solid #ccc;
+    padding:10px;
+    text-align:center;
+}
+
+.bundle-table th{
+    background:#f2f2f2;
+}
+
+.highest-row{
+    background:#004D40;
+    color:white;
+    font-weight:bold;
+}
+
+.attainable-row{
+    background:#40B0A6;
+    color:black;
+    font-style:italic;
+}
+
+.impossible-row{
+    text-decoration:line-through;
+}
+
 </style>
 </head>
 
@@ -190,8 +252,34 @@ Official course grades are determined by the instructor in accordance with the c
 </div>
 
 <div class="card">
-<h2>Course Engagement Points Grade Ladder</h2>
-<div id="gradeLadder"></div>
+
+<h2>Grade Bundle Visualization</h2>
+
+<p>
+This table shows all possible course grades and highlights which grades are still attainable.
+</p>
+
+<div class="legend">
+
+<div class="legend-item">
+<span class="legend-box highest"></span>
+Highest Grade Still Possible
+</div>
+
+<div class="legend-item">
+<span class="legend-box attainable"></span>
+Lower Grade Still Attainable
+</div>
+
+<div class="legend-item">
+<span class="legend-box impossible"></span>
+No Longer Attainable (strikethrough text)
+</div>
+
+</div>
+
+<div id="bundleTable"></div>
+
 </div>
 
 </div>
@@ -479,65 +567,153 @@ available points.
 
 `;
 
-let ladderHTML = `
+const gradesInOrder = [
+"A",
+"A-",
+"B+",
+"B",
+"B-",
+"C+",
+"C",
+"C-",
+"D+",
+"D",
+"F"
+];
 
-<p>
-Current Points:
-<b>${currentPoints}</b>
-</p>
+const highestIndex =
+gradesInOrder.indexOf(highestGrade);
 
-<p>
-Highest Possible Final Points:
-<b>${maximumPossiblePoints}</b>
-</p>
+let tableHTML = `
 
-<hr>
+<table class="bundle-table">
+
+<tr>
+<th>Grade</th>
+<th>Course Engagement Points</th>
+<th>Oral History Parts 1 & 2</th>
+<th>Final Paper</th>
+</tr>
 
 `;
 
-for(const rule of gradeRules){
+const bundleRows = [
 
-let status="";
+[
+"A",
+"373-460",
+"Both Satisfactory",
+"Excellent"
+],
 
-if(currentPoints >= rule.min){
+[
+"A-",
+"328-372",
+"Both Satisfactory",
+"Excellent"
+],
 
-status =
-'<span class="met">Currently Met by Points</span>';
+[
+"B+",
+"309-327",
+"At Least One Satisfactory",
+"Excellent"
+],
+
+[
+"B",
+"287-308",
+"At Least One Satisfactory",
+"Proficient"
+],
+
+[
+"B-",
+"264-286",
+"At Least One Satisfactory",
+"Proficient"
+],
+
+[
+"C+",
+"250-263",
+"Both Unsatisfactory",
+"Proficient or Excellent"
+],
+
+[
+"C",
+"233-249",
+"Both Unsatisfactory",
+"Developing"
+],
+
+[
+"C-",
+"216-232",
+"Both Unsatisfactory",
+"Developing"
+],
+
+[
+"D+",
+"184-215",
+"Both Unsatisfactory",
+"Developing or Higher"
+],
+
+[
+"D",
+"167-183",
+"Both Unsatisfactory",
+"Needs Improvement"
+],
+
+[
+"F",
+"<167",
+"Failed",
+"Failed"
+]
+
+];
+
+bundleRows.forEach((row,index)=>{
+
+let rowClass="";
+
+if(index===highestIndex){
+
+rowClass="highest-row";
 
 }
-else if(maximumPossiblePoints >= rule.min){
+else if(index>highestIndex){
 
-status =
-'<span class="possible">Still Possible</span>';
+rowClass="attainable-row";
 
 }
 else{
 
-status =
-'<span class="notpossible">Not Possible</span>';
+rowClass="impossible-row";
 
 }
 
-ladderHTML += `
-
-<div class="ladder-row">
-
-<b>${rule.grade}</b>
-(${rule.min}+ points)
-
-<br>
-
-${status}
-
-</div>
-
+tableHTML += `
+<tr class="${rowClass}">
+<td>${row[0]}</td>
+<td>${row[1]}</td>
+<td>${row[2]}</td>
+<td>${row[3]}</td>
+</tr>
 `;
 
-}
+});
+
+tableHTML += "</table>";
 
 document.getElementById(
-"gradeLadder"
-).innerHTML = ladderHTML;
+"bundleTable"
+).innerHTML = tableHTML;
 
 let limits = [];
 
