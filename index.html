@@ -242,13 +242,8 @@ Official course grades are determined by the instructor in accordance with the c
 </div>
 
 <div class="card">
-<h2>Highest Grade Still Possible & Remaining Opportunities</h2>
+<h2>Highest Grade Still Possible & How to Earn It</h2>
 <div id="highestPossible"></div>
-</div>
-
-<div class="card">
-<h2>Limiting Factors</h2>
-<div id="limitingFactors"></div>
 </div>
 
 <div class="card">
@@ -714,64 +709,6 @@ tableHTML += "</table>";
 document.getElementById(
 "bundleTable"
 ).innerHTML = tableHTML;
-
-let limits = [];
-
-if(
-highestGrade === "A" ||
-highestGrade === "A-"
-){
-
-if(futurePart1 !== "Satisfactory"){
-limits.push(
-"Draft 1 must be Satisfactory for an A or A-."
-);
-}
-
-if(futurePart2 !== "Satisfactory"){
-limits.push(
-"Draft 2 must be Satisfactory for an A or A-."
-);
-}
-
-if(futurePaper !== "Excellent"){
-limits.push(
-"Final Paper must be Excellent for an A or A-."
-);
-}
-
-}
-
-if(
-(highestGrade === "B+" ||
- highestGrade === "B" ||
- highestGrade === "B-") &&
-
-futurePart1 !== "Satisfactory" &&
-futurePart2 !== "Satisfactory"
-){
-
-limits.push(
-"B- or higher requires at least one Satisfactory rating on Draft 1 or Draft 2."
-);
-
-}
-
-document.getElementById(
-"limitingFactors"
-).innerHTML =
-
-limits.length === 0
-
-? `<p class="success">
-No limiting factors currently prevent your highest possible grade from being an A.
-</p>`
-
-: limits.map(
-x => `<p class="warning">${x}</p>`
-).join("");
-
-}
 
 document
 .querySelectorAll("input, select")
