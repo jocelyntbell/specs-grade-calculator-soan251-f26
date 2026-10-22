@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Course Grade Planner</title>
+<title>SOAN251 Fall 2026 Grade Calculator</title>
 
 <style>
 :root{
@@ -164,12 +164,12 @@ ul{
 
 <div class="notice">
 <strong>
-This calculator is intended for planning purposes only. Official course grades are determined by the instructor and course syllabus.
+This calculator is intended for reference only. Official course grades are determined by the instructor in accordance with the course syllabus.
 </strong>
 </div>
 
 <div class="card">
-<h1>Course Grade Planner</h1>
+<h1>Course Engagement Points</h1>
 
 <div class="grid">
 
@@ -188,14 +188,14 @@ This calculator is intended for planning purposes only. Official course grades a
 </div>
 
 <div>
-<label>Oral History Part 1</label>
+<label>Oral History Draft 1</label>
 <select id="part1">
 <option>Not Graded Yet</option>
 <option>Satisfactory</option>
 <option>Unsatisfactory</option>
 </select>
 
-<label>Oral History Part 2</label>
+<label>Oral History Draft 2</label>
 <select id="part2">
 <option>Not Graded Yet</option>
 <option>Satisfactory</option>
@@ -221,7 +221,7 @@ This calculator is intended for planning purposes only. Official course grades a
 </div>
 
 <div class="card">
-<h2>Grade Requirement Breakdown</h2>
+<h2>Assignment Bundle Breakdown</h2>
 
 <div class="legend">
 <div class="legend-item legend-highest">
@@ -242,7 +242,7 @@ Grade No Longer Attainable
 <tr>
 <th>Grade</th>
 <th>Course Engagement Points</th>
-<th>Part 1 & Part 2</th>
+<th>Draft 1 & Draft 2</th>
 <th>Final Paper</th>
 </tr>
 </thead>
@@ -515,7 +515,7 @@ document.getElementById(
 <strong>Minimum Requirements</strong><br>
 Course Engagement Points: ${highest.points}<br>
 
-Part 1 & Part 2 Requirement:
+Draft 1 & Draft 2 Requirement:
 ${highest.parts==="bothS"
 ? "Both Satisfactory"
 : highest.parts==="oneS"
@@ -530,7 +530,7 @@ ${highest.paper.join(" or ")}
 <strong>Additional Points Needed:</strong>
 ${needed}<br><br>
 
-<strong>Remaining Opportunities</strong>
+<strong>Remaining Opportunities to Earn Points</strong>
 
 <ul>
 <li>Exit Tickets: ${exitRemaining} points available</li>
