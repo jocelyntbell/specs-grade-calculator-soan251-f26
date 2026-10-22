@@ -1,455 +1,617 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course Grade Planner</title>
+
+<style>
+:root{
+    --highest:#004D40;
+    --possible:#40B0A6;
+    --bg:#f4f7f8;
+    --card:#ffffff;
+    --border:#d9e1e3;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin:0;
+    padding:16px;
+    background:var(--bg);
+    color:#222;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+}
+
+.card{
+    background:var(--card);
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:18px;
+    box-shadow:0 2px 6px rgba(0,0,0,.08);
+}
+
+h1{
+    text-align:center;
+    margin-top:0;
+}
+
+h2{
+    margin-top:0;
+}
+
+.notice{
+    background:#fff3cd;
+    border-left:5px solid #ffc107;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:18px;
+}
+
+label{
+    display:block;
+    margin-top:12px;
+    font-weight:bold;
+}
+
+input,select{
+    width:100%;
+    padding:10px;
+    margin-top:4px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+}
+
+@media (min-width:750px){
+    .grid{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+.result{
+    font-size:1.1rem;
+    line-height:1.7;
+}
+
+.legend{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-bottom:15px;
+}
+
+.legend-item{
+    padding:8px;
+    border-radius:6px;
+}
+
+.legend-highest{
+    background:#004D40;
+    color:white;
+    font-weight:bold;
+}
+
+.legend-possible{
+    background:#40B0A6;
+    font-style:italic;
+}
+
+.legend-impossible{
+    text-decoration:line-through;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:.95rem;
+}
+
+th,td{
+    border:1px solid #ccc;
+    padding:10px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:#eaeaea;
+}
+
+.highest{
+    background:#004D40;
+    color:white;
+    font-weight:bold;
+}
+
+.possible{
+    background:#40B0A6;
+    font-style:italic;
+    color:black;
+}
+
+.impossible{
+    text-decoration:line-through;
+}
+
+.small{
+    font-size:.9rem;
+}
+
+ul{
+    margin-top:6px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="notice">
+<strong>
+This calculator is intended for planning purposes only. Official course grades are determined by the instructor and course syllabus.
+</strong>
+</div>
+
+<div class="card">
+<h1>Course Grade Planner</h1>
+
+<div class="grid">
+
+<div>
+<label>Total Course Engagement Points Earned</label>
+<input type="number" id="points" min="0" max="460" value="0">
+
+<label>Quizzes Graded (0-10)</label>
+<input type="number" id="quizzes" min="0" max="10" value="0">
+
+<label>Reflections Graded (0-4)</label>
+<input type="number" id="reflections" min="0" max="4" value="0">
+
+<label>Exit Tickets Graded (0-26)</label>
+<input type="number" id="exitTickets" min="0" max="26" value="0">
+</div>
+
+<div>
+<label>Oral History Part 1</label>
+<select id="part1">
+<option>Not Graded Yet</option>
+<option>Satisfactory</option>
+<option>Unsatisfactory</option>
+</select>
+
+<label>Oral History Part 2</label>
+<select id="part2">
+<option>Not Graded Yet</option>
+<option>Satisfactory</option>
+<option>Unsatisfactory</option>
+</select>
+
+<label>Oral History Final Paper</label>
+<select id="paper">
+<option>Not Graded Yet</option>
+<option>Excellent</option>
+<option>Proficient</option>
+<option>Developing</option>
+<option>Needs Improvement</option>
+</select>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+<h2>Highest Grade Still Possible</h2>
+<div id="highestCard" class="result"></div>
+</div>
+
+<div class="card">
+<h2>Grade Requirement Breakdown</h2>
+
+<div class="legend">
+<div class="legend-item legend-highest">
+Highest Grade Still Possible
+</div>
+
+<div class="legend-item legend-possible">
+Grade Still Attainable
+</div>
+
+<div class="legend-item legend-impossible">
+Grade No Longer Attainable
+</div>
+</div>
+
+<table id="gradeTable">
+<thead>
+<tr>
+<th>Grade</th>
+<th>Course Engagement Points</th>
+<th>Part 1 & Part 2</th>
+<th>Final Paper</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr data-grade="A">
+<td>A</td>
+<td>≥ 373</td>
+<td>Both Satisfactory</td>
+<td>Excellent</td>
+</tr>
+
+<tr data-grade="A-">
+<td>A-</td>
+<td>≥ 328</td>
+<td>Both Satisfactory</td>
+<td>Excellent</td>
+</tr>
+
+<tr data-grade="B+">
+<td>B+</td>
+<td>≥ 309</td>
+<td>At least one Satisfactory</td>
+<td>Proficient or Excellent</td>
+</tr>
+
+<tr data-grade="B">
+<td>B</td>
+<td>≥ 287</td>
+<td>At least one Satisfactory</td>
+<td>Proficient</td>
+</tr>
+
+<tr data-grade="B-">
+<td>B-</td>
+<td>≥ 264</td>
+<td>At least one Satisfactory</td>
+<td>Proficient</td>
+</tr>
+
+<tr data-grade="C+">
+<td>C+</td>
+<td>≥ 250</td>
+<td>Both Unsatisfactory</td>
+<td>Developing, Proficient, or Excellent</td>
+</tr>
+
+<tr data-grade="C">
+<td>C</td>
+<td>≥ 233</td>
+<td>Both Unsatisfactory</td>
+<td>Developing</td>
+</tr>
+
+<tr data-grade="C-">
+<td>C-</td>
+<td>≥ 216</td>
+<td>Both Unsatisfactory</td>
+<td>Developing</td>
+</tr>
+
+<tr data-grade="D+">
+<td>D+</td>
+<td>≥ 184</td>
+<td>Both Unsatisfactory</td>
+<td>Developing, Proficient, or Excellent</td>
+</tr>
+
+<tr data-grade="D">
+<td>D</td>
+<td>≥ 167</td>
+<td>Both Unsatisfactory</td>
+<td>Needs Improvement</td>
+</tr>
+
+<tr data-grade="F">
+<td>F</td>
+<td>&lt;167</td>
+<td>Failed</td>
+<td>Failed</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+
+</div>
+
 <script>
 
-const gradeRules = [
-
-{ grade:"A", min:373 },
-{ grade:"A-", min:328 },
-{ grade:"B+", min:309 },
-{ grade:"B", min:287 },
-{ grade:"B-", min:264 },
-{ grade:"C+", min:250 },
-{ grade:"C", min:233 },
-{ grade:"C-", min:216 },
-{ grade:"D+", min:184 },
-{ grade:"D", min:167 }
-
+const grades = [
+{
+grade:"A",
+points:373,
+parts:"bothS",
+paper:["Excellent"]
+},
+{
+grade:"A-",
+points:328,
+parts:"bothS",
+paper:["Excellent"]
+},
+{
+grade:"B+",
+points:309,
+parts:"oneS",
+paper:["Proficient","Excellent"]
+},
+{
+grade:"B",
+points:287,
+parts:"oneS",
+paper:["Proficient"]
+},
+{
+grade:"B-",
+points:264,
+parts:"oneS",
+paper:["Proficient"]
+},
+{
+grade:"C+",
+points:250,
+parts:"bothU",
+paper:["Developing","Proficient","Excellent"]
+},
+{
+grade:"C",
+points:233,
+parts:"bothU",
+paper:["Developing"]
+},
+{
+grade:"C-",
+points:216,
+parts:"bothU",
+paper:["Developing"]
+},
+{
+grade:"D+",
+points:184,
+parts:"bothU",
+paper:["Developing","Proficient","Excellent"]
+},
+{
+grade:"D",
+points:167,
+parts:"bothU",
+paper:["Needs Improvement"]
+}
 ];
 
-function oralStatus(part1, part2){
+function gradePossible(rule,p1,p2,paper,maxPoints){
 
-    if(
-        part1==="Satisfactory" &&
-        part2==="Satisfactory"
-    ){
-        return "bothS";
-    }
+if(maxPoints < rule.points){
+return false;
+}
 
-    if(
-        part1==="Satisfactory" ||
-        part2==="Satisfactory"
-    ){
-        return "oneS";
-    }
+if(paper !== "Not Graded Yet" &&
+!rule.paper.includes(paper)){
+return false;
+}
 
-    return "bothU";
+if(rule.parts==="bothS"){
+if(
+(p1==="Unsatisfactory") ||
+(p2==="Unsatisfactory")
+){
+return false;
+}
+}
+
+if(rule.parts==="oneS"){
+if(
+p1==="Unsatisfactory" &&
+p2==="Unsatisfactory"
+){
+return false;
+}
+}
+
+if(rule.parts==="bothU"){
+if(
+p1==="Satisfactory" ||
+p2==="Satisfactory"
+){
+return false;
+}
+}
+
+return true;
 }
 
 function update(){
 
-const currentPoints =
-Number(document.getElementById("points").value);
+const points =
+Number(document.getElementById("points").value || 0);
 
-const quizzesGraded =
-Number(document.getElementById("quizzes").value);
+const quizzes =
+Number(document.getElementById("quizzes").value || 0);
 
-const reflectionsGraded =
-Number(document.getElementById("reflections").value);
+const reflections =
+Number(document.getElementById("reflections").value || 0);
 
-const exitTicketsGraded =
-Number(document.getElementById("exitTickets").value);
+const exits =
+Number(document.getElementById("exitTickets").value || 0);
 
-const part1 =
+const p1 =
 document.getElementById("part1").value;
 
-const part2 =
+const p2 =
 document.getElementById("part2").value;
 
-const finalPaper =
-document.getElementById("finalPaper").value;
+const paper =
+document.getElementById("paper").value;
 
-const remainingQuizPoints =
-(10-quizzesGraded)*10;
+const quizRemaining =
+(10 - quizzes) * 10;
 
-const remainingReflectionPoints =
-(4-reflectionsGraded)*25;
+const reflectionRemaining =
+(4 - reflections) * 25;
 
-const remainingExitTicketPoints =
-(26-exitTicketsGraded)*10;
+const exitRemaining =
+(26 - exits) * 10;
 
-const remainingPoints =
-remainingQuizPoints +
-remainingReflectionPoints +
-remainingExitTicketPoints;
+const remainingTotal =
+quizRemaining +
+reflectionRemaining +
+exitRemaining;
 
-const maximumPossiblePoints =
-currentPoints +
-remainingPoints;
+const maxPossiblePoints =
+points + remainingTotal;
 
-const futurePart1 =
-part1==="Not Graded Yet"
-? "Satisfactory"
-: part1;
+let attainable = [];
 
-const futurePart2 =
-part2==="Not Graded Yet"
-? "Satisfactory"
-: part2;
-
-const futurePaper =
-finalPaper==="Not Graded Yet"
-? "Excellent"
-: finalPaper;
-
-const futureOral =
-oralStatus(
-futurePart1,
-futurePart2
-);
-
-let highestGrade = "F";
-
+grades.forEach(g=>{
 if(
-maximumPossiblePoints >= 373 &&
-futureOral==="bothS" &&
-futurePaper==="Excellent"
-){
-highestGrade="A";
-}
-
-else if(
-maximumPossiblePoints >= 328 &&
-futureOral==="bothS" &&
-futurePaper==="Excellent"
-){
-highestGrade="A-";
-}
-
-else if(
-maximumPossiblePoints >= 309 &&
-(futureOral==="oneS" || futureOral==="bothS") &&
-(
-futurePaper==="Excellent" ||
-futurePaper==="Proficient"
+gradePossible(
+g,
+p1,
+p2,
+paper,
+maxPossiblePoints
 )
 ){
-highestGrade="B+";
+attainable.push(g);
 }
-
-else if(
-maximumPossiblePoints >= 287 &&
-(futureOral==="oneS" || futureOral==="bothS") &&
-futurePaper==="Proficient"
-){
-highestGrade="B";
-}
-
-else if(
-maximumPossiblePoints >= 264 &&
-(futureOral==="oneS" || futureOral==="bothS") &&
-futurePaper==="Proficient"
-){
-highestGrade="B-";
-}
-
-else if(
-maximumPossiblePoints >= 250 &&
-futureOral==="bothU"
-){
-highestGrade="C+";
-}
-
-else if(
-maximumPossiblePoints >= 233 &&
-futureOral==="bothU" &&
-futurePaper==="Developing"
-){
-highestGrade="C";
-}
-
-else if(
-maximumPossiblePoints >= 216 &&
-futureOral==="bothU" &&
-futurePaper==="Developing"
-){
-highestGrade="C-";
-}
-
-else if(
-maximumPossiblePoints >= 184 &&
-futureOral==="bothU"
-){
-highestGrade="D+";
-}
-
-else if(
-maximumPossiblePoints >= 167 &&
-futureOral==="bothU" &&
-futurePaper==="Needs Improvement"
-){
-highestGrade="D";
-}
-
-let targetMin = 0;
-
-gradeRules.forEach(rule=>{
-
-if(rule.grade===highestGrade){
-targetMin = rule.min;
-}
-
 });
 
-const pointsNeeded =
+const highest =
+attainable.length > 0
+? attainable[0]
+: null;
+
+if(highest){
+
+const needed =
 Math.max(
 0,
-targetMin-currentPoints
+highest.points - points
 );
 
-let draftRequirement = "";
-let paperRequirement = "";
-
-switch(highestGrade){
-
-case "A":
-case "A-":
-
-draftRequirement =
-"Both Draft 1 and Draft 2 must be Satisfactory.";
-
-paperRequirement =
-"Excellent";
-
-break;
-
-case "B+":
-case "B":
-case "B-":
-
-draftRequirement =
-"At least one of Draft 1 or Draft 2 must be Satisfactory.";
-
-paperRequirement =
-highestGrade==="B+"
-? "Proficient or Excellent"
-: "Proficient";
-
-break;
-
-case "C+":
-
-draftRequirement =
-"Both Draft 1 and Draft 2 must be Unsatisfactory.";
-
-paperRequirement =
-"Developing, Proficient, or Excellent";
-
-break;
-
-case "C":
-case "C-":
-
-draftRequirement =
-"Both Draft 1 and Draft 2 must be Unsatisfactory.";
-
-paperRequirement =
-"Developing";
-
-break;
-
-case "D+":
-
-draftRequirement =
-"Both Draft 1 and Draft 2 must be Unsatisfactory.";
-
-paperRequirement =
-"Developing, Proficient, or Excellent";
-
-break;
-
-case "D":
-
-draftRequirement =
-"Both Draft 1 and Draft 2 must be Unsatisfactory.";
-
-paperRequirement =
-"Needs Improvement";
-
-break;
-
-}
-
 document.getElementById(
-"highestPossible"
+"highestCard"
 ).innerHTML = `
+<strong>Highest Grade Still Possible:</strong> ${highest.grade}<br><br>
 
-<h3>Highest Grade Still Possible: ${highestGrade}</h3>
+<strong>Minimum Requirements</strong><br>
+Course Engagement Points: ${highest.points}<br>
 
-<p>
-Current Course Engagement Points:
-<b>${currentPoints}</b>
-</p>
+Part 1 & Part 2 Requirement:
+${highest.parts==="bothS"
+? "Both Satisfactory"
+: highest.parts==="oneS"
+? "At least one Satisfactory"
+: "Both Unsatisfactory"}
+<br>
 
-<p>
-Highest Possible Final Course Engagement Points:
-<b>${maximumPossiblePoints}</b>
-</p>
+Final Paper Requirement:
+${highest.paper.join(" or ")}
+<br><br>
 
-<hr>
+<strong>Additional Points Needed:</strong>
+${needed}<br><br>
 
-<h3>
-Minimum Needed For A ${highestGrade}
-</h3>
-
-<ul>
-
-<li>
-<b>Additional Points Needed:</b>
-${pointsNeeded}
-</li>
-
-<li>
-<b>Draft Requirement:</b>
-${draftRequirement}
-</li>
-
-<li>
-<b>Minimum Oral History Paper Grade:</b>
-${paperRequirement}
-</li>
-
-</ul>
-
-<hr>
-
-<h3>Remaining Point Opportunities</h3>
+<strong>Remaining Opportunities</strong>
 
 <ul>
-
-<li>
-Quizzes Remaining:
-<b>${10-quizzesGraded}</b>
-(${remainingQuizPoints} possible points)
-</li>
-
-<li>
-Reflections Remaining:
-<b>${4-reflectionsGraded}</b>
-(${remainingReflectionPoints} possible points)
-</li>
-
-<li>
-Exit Tickets Remaining:
-<b>${26-exitTicketsGraded}</b>
-(${remainingExitTicketPoints} possible points)
-</li>
-
+<li>Exit Tickets: ${exitRemaining} points available</li>
+<li>Reflections: ${reflectionRemaining} points available</li>
+<li>Quizzes: ${quizRemaining} points available</li>
+<li>Total Remaining: ${remainingTotal} points available</li>
 </ul>
-
-<p>
-<b>
-Total Remaining Available Points:
-${remainingPoints}
-</b>
-</p>
-
-<p>
-<b>
-To earn a ${highestGrade},
-you need ${pointsNeeded}
-of the remaining
-${remainingPoints}
-available points.
-</b>
-</p>
-
 `;
-
-const gradesInOrder = [
-"A",
-"A-",
-"B+",
-"B",
-"B-",
-"C+",
-"C",
-"C-",
-"D+",
-"D",
-"F"
-];
-
-const highestIndex =
-gradesInOrder.indexOf(highestGrade);
-
-const bundleRows = [
-
-["A","373+","Both Satisfactory","Excellent"],
-["A-","328+","Both Satisfactory","Excellent"],
-["B+","309+","At Least One Satisfactory","Proficient or Excellent"],
-["B","287+","At Least One Satisfactory","Proficient"],
-["B-","264+","At Least One Satisfactory","Proficient"],
-["C+","250+","Both Unsatisfactory","Developing, Proficient, or Excellent"],
-["C","233+","Both Unsatisfactory","Developing"],
-["C-","216+","Both Unsatisfactory","Developing"],
-["D+","184+","Both Unsatisfactory","Developing, Proficient, or Excellent"],
-["D","167+","Both Unsatisfactory","Needs Improvement"],
-["F","<167","Failed","Failed"]
-
-];
-
-let tableHTML = `
-
-<table class="bundle-table">
-
-<tr>
-<th>Grade</th>
-<th>Course Engagement Points</th>
-<th>Oral History Drafts 1 & 2</th>
-<th>Final Paper</th>
-</tr>
-
-`;
-
-bundleRows.forEach((row,index)=>{
-
-let rowClass="";
-
-if(index===highestIndex){
-
-rowClass="highest-row";
-
-}
-else if(index>highestIndex){
-
-rowClass="attainable-row";
-
-}
-else{
-
-rowClass="impossible-row";
-
+}else{
+document.getElementById("highestCard").innerHTML =
+"<strong>No passing grade remains attainable under the selected Oral History outcomes.</strong>";
 }
 
-tableHTML += `
-<tr class="${rowClass}">
-<td>${row[0]}</td>
-<td>${row[1]}</td>
-<td>${row[2]}</td>
-<td>${row[3]}</td>
-</tr>
-`;
+document
+.querySelectorAll("#gradeTable tbody tr")
+.forEach(row=>{
 
+row.className="";
+
+const grade =
+row.dataset.grade;
+
+if(grade==="F"){
+return;
+}
+
+const isAttainable =
+attainable.some(
+g=>g.grade===grade
+);
+
+if(!isAttainable){
+row.classList.add("impossible");
+}
 });
 
-tableHTML += "</table>";
+if(highest){
 
-document.getElementById(
-"bundleTable"
-).innerHTML = tableHTML;
+const highestRow =
+document.querySelector(
+`tr[data-grade="${highest.grade}"]`
+);
+
+highestRow.className="highest";
+
+let hitHighest = false;
+
+document
+.querySelectorAll("#gradeTable tbody tr")
+.forEach(row=>{
+
+const g = row.dataset.grade;
+
+if(g==="F") return;
+
+if(g===highest.grade){
+hitHighest=true;
+return;
+}
+
+const attainableGrade =
+attainable.some(x=>x.grade===g);
+
+if(attainableGrade){
+row.className="possible";
+}
+});
+}
 
 }
 
 document
-.querySelectorAll("input, select")
-.forEach(element =>
-element.addEventListener(
-"input",
-update
-)
-);
+.querySelectorAll("input,select")
+.forEach(el=>{
+el.addEventListener("input",update);
+el.addEventListener("change",update);
+});
 
 update();
 
 </script>
+
+</body>
 </html>
