@@ -506,6 +506,23 @@ document.getElementById("gradeTableBody");
 
 tbody.innerHTML = "";
 
+const gradeOrder = [
+    "A",
+    "A-",
+    "B+",
+    "B",
+    "B-",
+    "C+",
+    "C",
+    "C-",
+    "D+",
+    "D",
+    "F"
+];
+
+const highestIndex =
+gradeOrder.indexOf(highest);
+
 for(const g of grades){
 
 let draftText="";
@@ -528,27 +545,21 @@ paperText =
 g.paper.join(" / ");
 
 const row = document.createElement("tr");
-
-const highestIndex =
-    grades.findIndex(x => x.grade === highest);
-
 const currentIndex =
-    grades.findIndex(x => x.grade === g.grade);
+gradeOrder.indexOf(g.grade);
 
-if (g.grade === highest) {
+if(currentIndex === highestIndex){
 
     row.classList.add("highest-row");
 
 }
-else if (currentIndex > highestIndex) {
+else if(currentIndex > highestIndex){
 
-    // Any grade BELOW the highest possible grade
     row.classList.add("attainable-row");
 
 }
-else {
+else{
 
-    // Any grade ABOVE the highest possible grade
     row.classList.add("impossible-row");
 
 }
