@@ -550,10 +550,60 @@ document.getElementById("highestCard").innerHTML =
 "<strong>No passing grade remains attainable under the selected Oral History outcomes.</strong>";
 }
 
+const gradeOrder = [
+"A",
+"A-",
+"B+",
+"B",
+"B-",
+"C+",
+"C",
+"C-",
+"D+",
+"D",
+"F"
+];
+
 document
 .querySelectorAll("#gradeTable tbody tr")
-.forEach(row=>{
+.forEach(row => {
+    row.className = "";
+});
 
+if (highest) {
+
+    const highestIndex =
+        gradeOrder.indexOf(highest.grade);
+
+    document
+    .querySelectorAll("#gradeTable tbody tr")
+    .forEach(row => {
+
+        const grade =
+            row.dataset.grade;
+
+        const rowIndex =
+            gradeOrder.indexOf(grade);
+
+        if (rowIndex === -1) return;
+
+        if (rowIndex < highestIndex) {
+
+            row.classList.add("impossible");
+
+        } else if (rowIndex === highestIndex) {
+
+            row.classList.add("highest");
+
+        } else {
+
+            row.classList.add("possible");
+
+        }
+
+    });
+
+}
 row.className="";
 
 const grade =
