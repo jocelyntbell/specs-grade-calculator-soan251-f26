@@ -3,177 +3,161 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOAN251 Fall 2026 Grade Calculator</title>
+<title>SOAN251 Specs Grading Calculator</title>
 
 <style>
 :root{
-    --highest:#004D40;
-    --possible:#40B0A6;
-    --bg:#f4f7f8;
-    --card:#ffffff;
-    --border:#d9e1e3;
+  --dark-green:#004D40;
+  --teal:#40B0A6;
+  --light:#f5f7f8;
+  --border:#d6dce0;
+  --text:#222;
 }
 
 *{
-    box-sizing:border-box;
+  box-sizing:border-box;
 }
 
 body{
-    font-family: Arial, Helvetica, sans-serif;
-    margin:0;
-    padding:16px;
-    background:var(--bg);
-    color:#222;
-}
-
-.container{
-    max-width:900px;
-    margin:auto;
-}
-
-.card{
-    background:var(--card);
-    border-radius:12px;
-    padding:18px;
-    margin-bottom:18px;
-    box-shadow:0 2px 6px rgba(0,0,0,.08);
+  margin:0;
+  padding:16px;
+  font-family:Arial, Helvetica, sans-serif;
+  background:#eef2f3;
+  color:var(--text);
 }
 
 h1{
-    text-align:center;
-    margin-top:0;
+  text-align:center;
+  margin-bottom:10px;
 }
 
-h2{
-    margin-top:0;
+.note{
+  background:#fff6d6;
+  border-left:5px solid #d6a300;
+  padding:12px;
+  margin-bottom:18px;
+  border-radius:8px;
 }
 
-.notice{
-    background:#fff3cd;
-    border-left:5px solid #ffc107;
-    padding:12px;
-    border-radius:8px;
-    margin-bottom:18px;
+.card{
+  background:white;
+  border-radius:12px;
+  padding:16px;
+  margin-bottom:16px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.card h2{
+  margin-top:0;
 }
 
 label{
-    display:block;
-    margin-top:12px;
-    font-weight:bold;
+  display:block;
+  margin-top:10px;
+  font-weight:bold;
 }
 
-input,select{
-    width:100%;
-    padding:10px;
-    margin-top:4px;
-    border:1px solid #ccc;
-    border-radius:8px;
-    font-size:16px;
+input,
+select{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  margin-top:4px;
+  font-size:16px;
 }
 
-.grid{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:12px;
+.result-box{
+  background:#f7f9fa;
+  border-radius:10px;
+  padding:12px;
+  margin-top:10px;
 }
 
-@media (min-width:750px){
-    .grid{
-        grid-template-columns:1fr 1fr;
-    }
+.key{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-bottom:15px;
 }
 
-.result{
-    font-size:1.1rem;
-    line-height:1.7;
-}
-
-.legend{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-    margin-bottom:15px;
-}
-
-.legend-item{
-    padding:8px;
-    border-radius:6px;
-}
-
-.legend-highest{
-    background:#004D40;
-    color:white;
-    font-weight:bold;
-}
-
-.legend-possible{
-    background:#40B0A6;
-    font-style:italic;
-}
-
-.legend-impossible{
-    text-decoration:line-through;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    font-size:.95rem;
-}
-
-th,td{
-    border:1px solid #ccc;
-    padding:10px;
-    text-align:left;
-    vertical-align:top;
-}
-
-th{
-    background:#eaeaea;
+.key-item{
+  padding:8px;
+  border-radius:6px;
 }
 
 .highest{
-    background:#004D40;
-    color:white;
-    font-weight:bold;
+  background:#004D40;
+  color:white;
+  font-weight:bold;
 }
 
-.possible{
-    background:#40B0A6;
-    font-style:italic;
-    color:black;
+.attainable{
+  background:#40B0A6;
+  font-style:italic;
 }
 
 .impossible{
-    text-decoration:line-through;
+  text-decoration:line-through;
 }
 
-.small{
-    font-size:.9rem;
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
 }
 
-ul{
-    margin-top:6px;
+th,td{
+  border:1px solid #ccc;
+  padding:8px;
+  text-align:left;
+}
+
+th{
+  background:#f0f0f0;
+}
+
+.highest-row{
+  background:#004D40;
+  color:white;
+  font-weight:bold;
+}
+
+.attainable-row{
+  background:#40B0A6;
+  color:black;
+  font-style:italic;
+}
+
+.impossible-row{
+  text-decoration:line-through;
+}
+
+@media(min-width:900px){
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<h1>SOAN 251 Grade Calculator</h1>
 
-<div class="notice">
+<div class="note">
 <strong>
 This calculator is intended for reference only. Official course grades are determined by the instructor in accordance with the course syllabus.
 </strong>
 </div>
 
-<div class="card">
-<h1>Course Engagement Points</h1>
-
 <div class="grid">
 
-<div>
+<div class="card">
+<h2>Course Engagement Points</h2>
+
 <label>Total Course Engagement Points Earned</label>
 <input type="number" id="points" min="0" max="460" value="0">
 
@@ -185,155 +169,72 @@ This calculator is intended for reference only. Official course grades are deter
 
 <label>Exit Tickets Graded (0-26)</label>
 <input type="number" id="exitTickets" min="0" max="26" value="0">
-</div>
-</div>
+
+<div class="result-box" id="remainingPointsCard"></div>
 </div>
 
 <div class="card">
-<h1>Oral History Project</h1>
+<h2>Oral History Project</h2>
 
-<div class="grid">
-
-<div>
-<label>Oral History Draft 1</label>
-<select id="part1">
-<option>Not Graded Yet</option>
-<option>Satisfactory</option>
-<option>Unsatisfactory</option>
+<label>Draft 1</label>
+<select id="draft1">
+  <option>Not Graded Yet</option>
+  <option>Satisfactory</option>
+  <option>Unsatisfactory</option>
 </select>
 
-<label>Oral History Draft 2</label>
-<select id="part2">
-<option>Not Graded Yet</option>
-<option>Satisfactory</option>
-<option>Unsatisfactory</option>
+<label>Draft 2</label>
+<select id="draft2">
+  <option>Not Graded Yet</option>
+  <option>Satisfactory</option>
+  <option>Unsatisfactory</option>
 </select>
 
-<label>Oral History Final Paper</label>
-<select id="paper">
-<option>Not Graded Yet</option>
-<option>Excellent</option>
-<option>Proficient</option>
-<option>Developing</option>
-<option>Needs Improvement</option>
+<label>Final Paper</label>
+<select id="finalPaper">
+  <option>Not Graded Yet</option>
+  <option>Excellent</option>
+  <option>Proficient</option>
+  <option>Developing</option>
+  <option>Needs Improvement</option>
 </select>
-</div>
-</div>
 </div>
 
 <div class="card">
 <h2>Highest Grade Still Possible</h2>
-<div id="highestCard" class="result"></div>
+<div id="highestGradeCard"></div>
 </div>
 
 <div class="card">
-<h2>Assignment Bundle Breakdown</h2>
+<h2>Assignment Bundles</h2>
 
-<div class="legend">
-<div class="legend-item legend-highest">
-Highest Grade Still Possible
+<div class="key">
+<div class="key-item highest">
+Highest Grade Still Possible (#004D40)
 </div>
 
-<div class="legend-item legend-possible">
-Grade Still Attainable
+<div class="key-item attainable">
+Grade Still Attainable (#40B0A6)
 </div>
 
-<div class="legend-item legend-impossible">
-Grade No Longer Attainable
+<div class="key-item impossible">
+Grade No Longer Possible
 </div>
 </div>
 
-<table id="gradeTable">
+<table>
 <thead>
 <tr>
 <th>Grade</th>
 <th>Course Engagement Points</th>
-<th>Draft 1 & Draft 2</th>
-<th>Final Paper</th>
+<th>Draft Requirement</th>
+<th>Final Paper Requirement</th>
 </tr>
 </thead>
 
-<tbody>
-
-<tr data-grade="A">
-<td>A</td>
-<td>≥ 373</td>
-<td>Both Satisfactory</td>
-<td>Excellent</td>
-</tr>
-
-<tr data-grade="A-">
-<td>A-</td>
-<td>≥ 328</td>
-<td>Both Satisfactory</td>
-<td>Excellent</td>
-</tr>
-
-<tr data-grade="B+">
-<td>B+</td>
-<td>≥ 309</td>
-<td>At least one Satisfactory</td>
-<td>Proficient or Excellent</td>
-</tr>
-
-<tr data-grade="B">
-<td>B</td>
-<td>≥ 287</td>
-<td>At least one Satisfactory</td>
-<td>Proficient</td>
-</tr>
-
-<tr data-grade="B-">
-<td>B-</td>
-<td>≥ 264</td>
-<td>At least one Satisfactory</td>
-<td>Proficient</td>
-</tr>
-
-<tr data-grade="C+">
-<td>C+</td>
-<td>≥ 250</td>
-<td>Both Unsatisfactory</td>
-<td>Developing, Proficient, or Excellent</td>
-</tr>
-
-<tr data-grade="C">
-<td>C</td>
-<td>≥ 233</td>
-<td>Both Unsatisfactory</td>
-<td>Developing</td>
-</tr>
-
-<tr data-grade="C-">
-<td>C-</td>
-<td>≥ 216</td>
-<td>Both Unsatisfactory</td>
-<td>Developing</td>
-</tr>
-
-<tr data-grade="D+">
-<td>D+</td>
-<td>≥ 184</td>
-<td>Both Unsatisfactory</td>
-<td>Developing, Proficient, or Excellent</td>
-</tr>
-
-<tr data-grade="D">
-<td>D</td>
-<td>≥ 167</td>
-<td>Both Unsatisfactory</td>
-<td>Needs Improvement</td>
-</tr>
-
-<tr data-grade="F">
-<td>F</td>
-<td>&lt;167</td>
-<td>Failed</td>
-<td>Failed</td>
-</tr>
-
-</tbody>
+<tbody id="gradeTableBody"></tbody>
 </table>
+
 </div>
 
 </div>
@@ -344,272 +245,319 @@ const grades = [
 {
 grade:"A",
 points:373,
-parts:"bothS",
+drafts:"bothS",
 paper:["Excellent"]
 },
 {
 grade:"A-",
 points:328,
-parts:"bothS",
+drafts:"bothS",
 paper:["Excellent"]
 },
 {
 grade:"B+",
 points:309,
-parts:"oneS",
+drafts:"oneS",
 paper:["Proficient","Excellent"]
 },
 {
 grade:"B",
 points:287,
-parts:"oneS",
+drafts:"oneS",
 paper:["Proficient"]
 },
 {
 grade:"B-",
 points:264,
-parts:"oneS",
+drafts:"oneS",
 paper:["Proficient"]
 },
 {
 grade:"C+",
 points:250,
-parts:"bothU",
+drafts:"bothU",
 paper:["Developing","Proficient","Excellent"]
 },
 {
 grade:"C",
 points:233,
-parts:"bothU",
+drafts:"bothU",
 paper:["Developing"]
 },
 {
 grade:"C-",
 points:216,
-parts:"bothU",
+drafts:"bothU",
 paper:["Developing"]
 },
 {
 grade:"D+",
 points:184,
-parts:"bothU",
+drafts:"bothU",
 paper:["Developing","Proficient","Excellent"]
 },
 {
 grade:"D",
 points:167,
-parts:"bothU",
+drafts:"bothU",
 paper:["Needs Improvement"]
+},
+{
+grade:"F",
+points:0,
+drafts:"any",
+paper:["Any"]
 }
 ];
 
-function gradePossible(rule,p1,p2,paper,maxPoints){
+function draftPossible(requirement,d1,d2){
 
-if(maxPoints < rule.points){
-return false;
-}
-
-if(paper !== "Not Graded Yet" &&
-!rule.paper.includes(paper)){
-return false;
+if(requirement==="any"){
+return true;
 }
 
-if(rule.parts==="bothS"){
-if(
-(p1==="Unsatisfactory") ||
-(p2==="Unsatisfactory")
-){
-return false;
-}
+if(requirement==="bothS"){
+
+const canBeS1 = d1==="Satisfactory" || d1==="Not Graded Yet";
+const canBeS2 = d2==="Satisfactory" || d2==="Not Graded Yet";
+
+return canBeS1 && canBeS2;
 }
 
-if(rule.parts==="oneS"){
-if(
-p1==="Unsatisfactory" &&
-p2==="Unsatisfactory"
-){
-return false;
-}
+if(requirement==="oneS"){
+
+const currentS =
+(d1==="Satisfactory") ||
+(d2==="Satisfactory");
+
+const futureS =
+(d1==="Not Graded Yet") ||
+(d2==="Not Graded Yet");
+
+return currentS || futureS;
 }
 
-if(rule.parts==="bothU"){
-if(
-p1==="Satisfactory" ||
-p2==="Satisfactory"
-){
+if(requirement==="bothU"){
+
+if(d1==="Satisfactory" || d2==="Satisfactory"){
 return false;
-}
 }
 
 return true;
 }
 
-function update(){
+return false;
+}
+
+function paperPossible(accepted,current){
+
+if(accepted[0]==="Any"){
+return true;
+}
+
+if(current==="Not Graded Yet"){
+return true;
+}
+
+return accepted.includes(current);
+}
+
+function recalc(){
 
 const points =
-Number(document.getElementById("points").value || 0);
+Number(document.getElementById("points").value);
 
 const quizzes =
-Number(document.getElementById("quizzes").value || 0);
+Number(document.getElementById("quizzes").value);
 
 const reflections =
-Number(document.getElementById("reflections").value || 0);
+Number(document.getElementById("reflections").value);
 
-const exits =
-Number(document.getElementById("exitTickets").value || 0);
+const exitTickets =
+Number(document.getElementById("exitTickets").value);
 
-const p1 =
-document.getElementById("part1").value;
+const draft1 =
+document.getElementById("draft1").value;
 
-const p2 =
-document.getElementById("part2").value;
+const draft2 =
+document.getElementById("draft2").value;
 
-const paper =
-document.getElementById("paper").value;
+const finalPaper =
+document.getElementById("finalPaper").value;
 
-const quizRemaining =
-(10 - quizzes) * 10;
+const remainingQuizPoints =
+Math.max(0,(10 - quizzes)) * 10;
 
-const reflectionRemaining =
-(4 - reflections) * 25;
+const remainingReflectionPoints =
+Math.max(0,(4 - reflections)) * 25;
 
-const exitRemaining =
-(26 - exits) * 10;
+const remainingExitPoints =
+Math.max(0,(26 - exitTickets)) * 10;
 
 const remainingTotal =
-quizRemaining +
-reflectionRemaining +
-exitRemaining;
+remainingQuizPoints +
+remainingReflectionPoints +
+remainingExitPoints;
 
-const maxPossiblePoints =
-points + remainingTotal;
+document.getElementById("remainingPointsCard").innerHTML = `
+<strong>Remaining Opportunities to Earn Points</strong><br><br>
 
-let attainable = [];
+Quizzes Remaining:
+${Math.max(0,10-quizzes)}
+ (${remainingQuizPoints} possible points)<br><br>
 
-grades.forEach(g=>{
-if(
-gradePossible(
-g,
-p1,
-p2,
-paper,
-maxPossiblePoints
-)
-){
-attainable.push(g);
+Reflections Remaining:
+${Math.max(0,4-reflections)}
+ (${remainingReflectionPoints} possible points)<br><br>
+
+Exit Tickets Remaining:
+${Math.max(0,26-exitTickets)}
+ (${remainingExitPoints} possible points)<br><br>
+
+<strong>Total Remaining Possible Points:
+${remainingTotal}</strong>
+`;
+
+const attainable = [];
+
+for(const g of grades){
+
+const enoughPotential =
+(points + remainingTotal) >= g.points;
+
+const draftOK =
+draftPossible(g.drafts,draft1,draft2);
+
+const paperOK =
+paperPossible(g.paper,finalPaper);
+
+if(enoughPotential && draftOK && paperOK){
+attainable.push(g.grade);
 }
-});
+}
 
-const highest =
-attainable.length > 0
-? attainable[0]
-: null;
+let highest =
+attainable.length > 0 ? attainable[0] : "F";
 
-if(highest){
+const highestObj =
+grades.find(g => g.grade===highest);
 
-const needed =
-Math.max(
-0,
-highest.points - points
-);
+let needed =
+Math.max(0, highestObj.points - points);
 
-document.getElementById(
-"highestCard"
-).innerHTML = `
-<strong>Highest Grade Still Possible:</strong> ${highest.grade}<br><br>
+let draftRequirement = "";
+let paperRequirement = "";
 
-<strong>Minimum Requirements</strong><br>
-Course Engagement Points: ${highest.points}<br>
+if(highestObj.drafts==="bothS"){
+draftRequirement="Draft 1 = Satisfactory, Draft 2 = Satisfactory";
+}
 
-Draft 1 & Draft 2 Requirement:
-${highest.parts==="bothS"
-? "Both Satisfactory"
-: highest.parts==="oneS"
-? "At least one Satisfactory"
-: "Both Unsatisfactory"}
-<br>
+if(highestObj.drafts==="oneS"){
+draftRequirement="At least one draft = Satisfactory";
+}
 
-Final Paper Requirement:
-${highest.paper.join(" or ")}
-<br><br>
+if(highestObj.drafts==="bothU"){
+draftRequirement="Both drafts = Unsatisfactory";
+}
+
+if(highestObj.paper[0]==="Any"){
+paperRequirement="Any";
+}
+else{
+paperRequirement=highestObj.paper.join(" or ");
+}
+
+document.getElementById("highestGradeCard").innerHTML = `
+<div class="result-box">
+
+<h3>${highest}</h3>
+
+<strong>Minimum Course Engagement Points:</strong>
+${highestObj.points}<br><br>
 
 <strong>Additional Points Needed:</strong>
 ${needed}<br><br>
 
-<strong>Remaining Opportunities to Earn Points</strong>
+<strong>Draft Requirement:</strong>
+${draftRequirement}<br><br>
 
-<ul>
-<li>Exit Tickets: ${exitRemaining} points available</li>
-<li>Reflections: ${reflectionRemaining} points available</li>
-<li>Quizzes: ${quizRemaining} points available</li>
-<li>Total Remaining: ${remainingTotal} points available</li>
-</ul>
+<strong>Final Paper Requirement:</strong>
+${paperRequirement}<br><br>
+
+<strong>Remaining Opportunities to Earn Points</strong><br>
+
+Quiz Points Available:
+${remainingQuizPoints}<br>
+
+Reflection Points Available:
+${remainingReflectionPoints}<br>
+
+Exit Ticket Points Available:
+${remainingExitPoints}<br><br>
+
+<strong>Total Remaining Points Available:
+${remainingTotal}</strong>
+
+</div>
 `;
-}else{
-document.getElementById("highestCard").innerHTML =
-"<strong>No passing grade remains attainable under the selected Oral History outcomes.</strong>";
+
+const tbody =
+document.getElementById("gradeTableBody");
+
+tbody.innerHTML = "";
+
+for(const g of grades){
+
+let draftText="";
+let paperText="";
+
+if(g.drafts==="bothS"){
+draftText="Both Satisfactory";
+}
+else if(g.drafts==="oneS"){
+draftText="At least one Satisfactory";
+}
+else if(g.drafts==="bothU"){
+draftText="Both Unsatisfactory";
+}
+else{
+draftText="N/A";
 }
 
-const gradeOrder = [
-"A",
-"A-",
-"B+",
-"B",
-"B-",
-"C+",
-"C",
-"C-",
-"D+",
-"D",
-"F"
-];
+paperText =
+g.paper.join(" / ");
 
-// Reset all row styling
-document
-.querySelectorAll("#gradeTable tbody tr")
-.forEach(row => {
-    row.className = "";
+const row =
+document.createElement("tr");
+
+if(g.grade===highest){
+row.classList.add("highest-row");
+}
+else if(attainable.includes(g.grade)){
+row.classList.add("attainable-row");
+}
+else{
+row.classList.add("impossible-row");
+}
+
+row.innerHTML = `
+<td>${g.grade}</td>
+<td>${g.points}+</td>
+<td>${draftText}</td>
+<td>${paperText}</td>
+`;
+
+tbody.appendChild(row);
+}
+
+}
+
+document.querySelectorAll("input,select").forEach(el=>{
+el.addEventListener("input",recalc);
+el.addEventListener("change",recalc);
 });
 
-// Apply highlighting
-document
-.querySelectorAll("#gradeTable tbody tr")
-.forEach(row => {
-
-    const grade = row.dataset.grade;
-
-    // Highest attainable grade
-    if (highest && grade === highest.grade) {
-        row.classList.add("highest");
-        return;
-    }
-
-    // F is always attainable
-    if (grade === "F") {
-        row.classList.add("possible");
-        return;
-    }
-
-    // Check whether this grade is still attainable
-    const isAttainable =
-        attainable.some(g => g.grade === grade);
-
-    if (isAttainable) {
-        row.classList.add("possible");
-    } else {
-        row.classList.add("impossible");
-    }
-
-});
-
-document
-.querySelectorAll("input,select")
-.forEach(el=>{
-el.addEventListener("input",update);
-el.addEventListener("change",update);
-});
-
-update();
+recalc();
 
 </script>
 
