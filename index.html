@@ -564,99 +564,43 @@ const gradeOrder = [
 "F"
 ];
 
+// Reset all row styling
 document
 .querySelectorAll("#gradeTable tbody tr")
 .forEach(row => {
     row.className = "";
 });
 
-if (highest) {
-
-    const highestIndex =
-        gradeOrder.indexOf(highest.grade);
-
-    document
-    .querySelectorAll("#gradeTable tbody tr")
-    .forEach(row => {
-
-        const grade =
-            row.dataset.grade;
-
-        const rowIndex =
-            gradeOrder.indexOf(grade);
-
-        if (rowIndex === -1) return;
-
-        if (rowIndex < highestIndex) {
-
-            row.classList.add("impossible");
-
-        } else if (rowIndex === highestIndex) {
-
-            row.classList.add("highest");
-
-        } else {
-
-            row.classList.add("possible");
-
-        }
-
-    });
-
-}
-row.className="";
-
-const grade =
-row.dataset.grade;
-
-if(grade==="F"){
-return;
-}
-
-const isAttainable =
-attainable.some(
-g=>g.grade===grade
-);
-
-if(!isAttainable){
-row.classList.add("impossible");
-}
-});
-
-if(highest){
-
-const highestRow =
-document.querySelector(
-`tr[data-grade="${highest.grade}"]`
-);
-
-highestRow.className="highest";
-
-let hitHighest = false;
-
+// Apply highlighting
 document
 .querySelectorAll("#gradeTable tbody tr")
-.forEach(row=>{
+.forEach(row => {
 
-const g = row.dataset.grade;
+    const grade = row.dataset.grade;
 
-if(g==="F") return;
+    // Highest attainable grade
+    if (highest && grade === highest.grade) {
+        row.classList.add("highest");
+        return;
+    }
 
-if(g===highest.grade){
-hitHighest=true;
-return;
-}
+    // F is always attainable
+    if (grade === "F") {
+        row.classList.add("possible");
+        return;
+    }
 
-const attainableGrade =
-attainable.some(x=>x.grade===g);
+    // Check whether this grade is still attainable
+    const isAttainable =
+        attainable.some(g => g.grade === grade);
 
-if(attainableGrade){
-row.className="possible";
-}
+    if (isAttainable) {
+        row.classList.add("possible");
+    } else {
+        row.classList.add("impossible");
+    }
+
 });
-}
-
-}
 
 document
 .querySelectorAll("input,select")
