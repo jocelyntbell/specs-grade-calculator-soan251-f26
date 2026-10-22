@@ -369,5 +369,87 @@ const gradesInOrder = [
 "F"
 ];
 
-const highestIndex
+const highestIndex =
+gradesInOrder.indexOf(highestGrade);
+
+const bundleRows = [
+
+["A","373+","Both Satisfactory","Excellent"],
+["A-","328+","Both Satisfactory","Excellent"],
+["B+","309+","At Least One Satisfactory","Proficient or Excellent"],
+["B","287+","At Least One Satisfactory","Proficient"],
+["B-","264+","At Least One Satisfactory","Proficient"],
+["C+","250+","Both Unsatisfactory","Developing, Proficient, or Excellent"],
+["C","233+","Both Unsatisfactory","Developing"],
+["C-","216+","Both Unsatisfactory","Developing"],
+["D+","184+","Both Unsatisfactory","Developing, Proficient, or Excellent"],
+["D","167+","Both Unsatisfactory","Needs Improvement"],
+["F","<167","Failed","Failed"]
+
+];
+
+let tableHTML = `
+
+<table class="bundle-table">
+
+<tr>
+<th>Grade</th>
+<th>Course Engagement Points</th>
+<th>Oral History Drafts 1 & 2</th>
+<th>Final Paper</th>
+</tr>
+
+`;
+
+bundleRows.forEach((row,index)=>{
+
+let rowClass="";
+
+if(index===highestIndex){
+
+rowClass="highest-row";
+
+}
+else if(index>highestIndex){
+
+rowClass="attainable-row";
+
+}
+else{
+
+rowClass="impossible-row";
+
+}
+
+tableHTML += `
+<tr class="${rowClass}">
+<td>${row[0]}</td>
+<td>${row[1]}</td>
+<td>${row[2]}</td>
+<td>${row[3]}</td>
+</tr>
+`;
+
+});
+
+tableHTML += "</table>";
+
+document.getElementById(
+"bundleTable"
+).innerHTML = tableHTML;
+
+}
+
+document
+.querySelectorAll("input, select")
+.forEach(element =>
+element.addEventListener(
+"input",
+update
+)
+);
+
+update();
+
+</script>
 </html>
