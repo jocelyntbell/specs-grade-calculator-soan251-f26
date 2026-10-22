@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOAN251 Specs Grading Calculator</title>
+<title>Course Grade Calculator</title>
 
 <style>
 :root{
@@ -174,7 +174,7 @@ This calculator is intended for reference only. Official course grades are deter
 </div>
 
 <div class="card">
-<h2>Oral History Project</h2>
+<h2>Oral History Grades</h2>
 
 <label>Draft 1</label>
 <select id="draft1">
@@ -400,7 +400,7 @@ remainingReflectionPoints +
 remainingExitPoints;
 
 document.getElementById("remainingPointsCard").innerHTML = `
-<strong>Remaining Opportunities to Earn Points</strong><br><br>
+<strong>Remaining Opportunities</strong><br><br>
 
 Quizzes Remaining:
 ${Math.max(0,10-quizzes)}
@@ -484,7 +484,7 @@ ${draftRequirement}<br><br>
 <strong>Final Paper Requirement:</strong>
 ${paperRequirement}<br><br>
 
-<strong>Remaining Opportunities to Earn Points</strong><br>
+<strong>Remaining Opportunities</strong><br>
 
 Quiz Points Available:
 ${remainingQuizPoints}<br>
