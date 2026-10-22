@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Course Grade Calculator</title>
+<title>SOAN251 Grade Calculator</title>
 
 <style>
 :root{
@@ -174,7 +174,7 @@ This calculator is intended for reference only. Official course grades are deter
 </div>
 
 <div class="card">
-<h2>Oral History Grades</h2>
+<h2>Oral History Grade</h2>
 
 <label>Draft 1</label>
 <select id="draft1">
@@ -484,7 +484,7 @@ ${draftRequirement}<br><br>
 <strong>Final Paper Requirement:</strong>
 ${paperRequirement}<br><br>
 
-<strong>Remaining Opportunities</strong><br>
+<strong>Remaining Opportunities to Earn Points</strong><br>
 
 Quiz Points Available:
 ${remainingQuizPoints}<br>
@@ -527,17 +527,30 @@ draftText="N/A";
 paperText =
 g.paper.join(" / ");
 
-const row =
-document.createElement("tr");
+const row = document.createElement("tr");
 
-if(g.grade===highest){
-row.classList.add("highest-row");
+const highestIndex =
+    grades.findIndex(x => x.grade === highest);
+
+const currentIndex =
+    grades.findIndex(x => x.grade === g.grade);
+
+if (g.grade === highest) {
+
+    row.classList.add("highest-row");
+
 }
-else if(attainable.includes(g.grade)){
-row.classList.add("attainable-row");
+else if (currentIndex > highestIndex) {
+
+    // Any grade BELOW the highest possible grade
+    row.classList.add("attainable-row");
+
 }
-else{
-row.classList.add("impossible-row");
+else {
+
+    // Any grade ABOVE the highest possible grade
+    row.classList.add("impossible-row");
+
 }
 
 row.innerHTML = `
